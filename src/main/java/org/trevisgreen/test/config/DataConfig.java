@@ -90,7 +90,7 @@ public class DataConfig {
             pp.setProperty("hibernate.default_schema", hibernateSchema);
 
             factoryBean.setDataSource(dataSource());
-            factoryBean.setPackagesToScan("org.davidmendoza.hyperion.model");
+            factoryBean.setPackagesToScan("org.trevisgreen.test.model");
             factoryBean.setHibernateProperties(pp);
             factoryBean.afterPropertiesSet();
             return factoryBean.getObject();
