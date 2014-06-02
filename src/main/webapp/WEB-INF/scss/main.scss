@@ -25,12 +25,18 @@ THE SOFTWARE.
     Created on : May 29, 2014, 2:41:38 PM
     Author     : Trevis
 */
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
+
 body {
     padding-top: 60px;
     color: white;
     font: 16px/1.5em Ubuntu, sans-serif;
     background: url('../img/bg.jpg') #333 no-repeat center center fixed;
-    
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
     filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg.jpg', sizingMethod='scale');
     -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg.jpg', sizingMethod='scale')";
 
