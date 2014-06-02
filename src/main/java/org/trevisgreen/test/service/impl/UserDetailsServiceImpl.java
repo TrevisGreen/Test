@@ -24,8 +24,6 @@
 package org.trevisgreen.test.service.impl;
 
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,17 +34,17 @@ import org.springframework.security.openid.OpenIDAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.trevisgreen.test.dao.UserDao;
 import org.trevisgreen.test.model.User;
+import org.trevisgreen.test.service.BaseService;
 
 /**
  *
  * @author Trevis
  */
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService,
+public class UserDetailsServiceImpl extends BaseService implements UserDetailsService,
         AuthenticationUserDetailsService<OpenIDAuthenticationToken> {
 
-    private static final Logger log = LoggerFactory
-            .getLogger(UserDetailsServiceImpl.class);
+    
     @Autowired
     private UserDao userDao;
 

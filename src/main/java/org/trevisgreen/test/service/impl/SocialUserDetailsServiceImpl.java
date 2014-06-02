@@ -21,42 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.test.config;
+package org.trevisgreen.test.service.impl;
 
-
-import javax.servlet.Filter;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.CharacterEncodingFilter;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.springframework.dao.DataAccessException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.social.security.SocialUserDetails;
+import org.springframework.social.security.SocialUserDetailsService;
+import org.trevisgreen.test.service.BaseService;
 
 /**
  *
  * @author Trevis
  */
-@Order(2)
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class SocialUserDetailsServiceImpl extends BaseService implements SocialUserDetailsService {
 
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{SecurityConfig.class,SocialConfig.class, DataConfig.class, MailConfig.class, ComponentConfig.class};
+    private final UserDetailsService userDetailsService;
+
+    public SocialUserDetailsServiceImpl(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{WebConfig.class};
-    }
+    public SocialUserDetails loadUserByUserId(String userId) throws UsernameNotFoundException, DataAccessException {
+        log.debug("Loading user by user id : {}", userId);
 
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/"};
-    }
+        UserDetails user = userDetailsService.loadUserByUsername(userId);
+        log.debug("Found user details: {}", user);
 
-    @Override
-    protected Filter[] getServletFilters() {
-
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        return new Filter[]{characterEncodingFilter};
+        return (SocialUserDetails) user;
     }
 
 }
