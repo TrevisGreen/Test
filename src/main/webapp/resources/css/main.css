@@ -25,15 +25,116 @@ THE SOFTWARE.
     Created on : May 29, 2014, 2:41:38 PM
     Author     : Trevis
 */
+@import url(http://fonts.googleapis.com/css?family=Ubuntu);
 body {
-  padding-top: 60px; }
-  body footer {
-    margin-top: 20px;
+  padding-top: 60px;
+  color: white;
+  font: 16px/1.5em Ubuntu, sans-serif;
+  background: url("../img/bg.jpg") #333333 no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg.jpg', sizingMethod='scale');
+  -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/bg.jpg', sizingMethod='scale')";
+  -webkit-transition: background .6s ease;
+  -moz-transition: background .6s ease;
+  -ms-transition: background .6s ease;
+  -o-transition: background .6s ease;
+  transition: background .6s ease; }
+  body a {
+    color: #92bce0; }
+    body a:hover, body a:focus {
+      color: #b9d4ec; }
+
+#login-popup {
+  position: relative;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  width: auto;
+  max-width: 500px;
+  margin: 20px auto;
+  color: #333; }
+
+.content {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding-bottom: 20px; }
+  .content .app-sidenav {
+    margin: 20px 0;
     padding: 10px 0;
-    background-image: -webkit-gradient(linear, left 0, left 100%, from(#3c3c3c), to(#222222));
-    background-image: -webkit-linear-gradient(top, #3c3c3c 0, #222222 100%);
-    background-image: -moz-linear-gradient(top, #3c3c3c 0, #222222 100%);
-    background-image: linear-gradient(to bottom, #3c3c3c 0, #222222 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c',endColorstr='#ff222222',GradientType=0);
-    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); }
+    text-shadow: 0 1px 0 #333;
+    background-color: rgba(200, 200, 200, 0.5);
+    border-radius: 5px; }
+    .content .app-sidenav li.active a {
+      font-weight: bold;
+      color: #FAFAFA;
+      background-color: rgba(100, 100, 100, 0.8); }
+    .content .app-sidenav li a {
+      color: #fff; }
+      .content .app-sidenav li a:hover {
+        color: #FAFAFA;
+        background-color: rgba(200, 200, 200, 0.8); }
+  .content .table {
+    background-color: rgba(50, 50, 50, 0.8); }
+  .content .table-striped > tbody > tr:nth-child(odd) > td, .content .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: rgba(100, 100, 100, 0.5); }
+  .content .table > thead > tr > th, .content .table > tbody > tr > th, .content .table > tfoot > tr > th, .content .table > thead > tr > td, .content .table > tbody > tr > td, .content .table > tfoot > tr > td {
+    border-top: 1px solid rgba(200, 200, 200, 0.5); }
+  .content .table > thead > tr > th {
+    border-bottom: 2px solid rgba(254, 254, 254, 0.5); }
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .castor-nav {
+    font-size: 0.75em; } }
+
+#signup-li a {
+  background-color: #3071a9;
+  color: #e6e6e6; }
+  #signup-li a:hover, #signup-li a:focus {
+    background-color: #428bca;
+    color: #fff; }
+
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+  border-top: 1px solid rgba(200, 200, 200, 0.5); }
+
+.table > thead > tr > th {
+  border-bottom: 2px solid rgba(254, 254, 254, 0.5); }
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .castor-nav {
+    font-size: 0.75em; } }
+
+#signup-li a {
+  background-color: #3071a9;
+  color: #e6e6e6; }
+  #signup-li a:hover, #signup-li a:focus {
+    background-color: #428bca;
+    color: #fff; }
+
+.btn-twitter {
+  background-image: none;
+  background-color: #2095c0;
+  border-color: #2095c0;
+  color: #e4f5fb;
+  filter: none; }
+
+.btn-twitter:hover, .btn-twitter:focus {
+  background-image: none;
+  background-color: #36b0dd;
+  border-color: #2095c0;
+  color: white;
+  filter: none; }
+
+.btn-facebook {
+  background-image: none;
+  background-color: #0e285f;
+  border-color: #0e285f;
+  color: #80a3ec;
+  filter: none; }
+
+.btn-facebook:hover, .btn-facebook:focus {
+  background-image: none;
+  background-color: #153b8b;
+  border-color: #0e285f;
+  color: #acc3f3;
+  filter: none; }

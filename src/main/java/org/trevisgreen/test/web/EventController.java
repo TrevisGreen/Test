@@ -24,6 +24,7 @@
 
 package org.trevisgreen.test.web;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,6 +34,8 @@ import org.trevisgreen.test.model.Event;
  *
  * @author Trevis
  */
+@Controller
+@RequestMapping("/event")
 public class EventController extends BaseController {
     
     @RequestMapping(value = "/create", method = RequestMethod.GET)
