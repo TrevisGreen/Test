@@ -60,14 +60,15 @@ THE SOFTWARE.
 
     </head>
     <body>
-
         <header class="navbar navbar-inverse navbar-fixed-top" role="banner" th:fragment='navigation(activeMenu)'>
             <div class="container">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span style="color: #fff;">Menu</span>
-                    </button>
-                    <a class="navbar-brand" href="#" th:href="@{/}" th:text='#{project.name}'>Trevis</a>
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>                    
                 </div>
                 <nav class="collapse navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav">
@@ -82,7 +83,6 @@ THE SOFTWARE.
             <div class="row">
                 <div class="col-sm-12">
                     <h1 th:text="#{welcome.label}">Welcome</h1>
-
                 </div>
             </div>
         </div>
