@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.test.dao.UserDao;
+import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.model.Role;
 import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.service.BaseService;
@@ -68,6 +69,11 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public Role getRole(String authority) {
         return userDao.getRole(authority);
+    }
+
+    @Override
+    public Connection getConnection(String username) {
+        return userDao.getConnection(username);
     }
 
 }

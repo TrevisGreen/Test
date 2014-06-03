@@ -24,6 +24,7 @@
 
 package org.trevisgreen.test.service;
 
+import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.model.Role;
 import org.trevisgreen.test.model.User;
 
@@ -41,4 +42,6 @@ public interface UserService {
     public User create(User user);
     
     public Role getRole(String authority);
+    
+    public Connection getConnection(String username);
 }

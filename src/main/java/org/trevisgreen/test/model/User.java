@@ -49,6 +49,7 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.social.security.SocialUserDetails;
 import org.trevisgreen.test.validation.PasswordsNotEmpty;
 import org.trevisgreen.test.validation.PasswordsNotEqual;
 
@@ -72,7 +73,7 @@ import org.trevisgreen.test.validation.PasswordsNotEqual;
         passwordVerificationFieldName = "passwordVerification"
 )
 
-public class User implements Serializable, UserDetails {
+public class User implements Serializable, UserDetails, SocialUserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -357,6 +358,13 @@ public class User implements Serializable, UserDetails {
     public boolean isSocialSignIn() {
         return signInProvider != null;
     }
+    
+    
+        public String getUserId() {
+        return username;
+    }
+
+    
 
     @Override
     public int hashCode() {

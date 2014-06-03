@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.test.dao.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.test.dao.BaseDao;
 import org.trevisgreen.test.dao.UserDao;
+import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.model.Role;
 import org.trevisgreen.test.model.User;
 
@@ -68,8 +70,11 @@ public class UserDaoHibernate extends BaseDao implements UserDao {
 
     @Override
     public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
-        user.setPasswordVerification(user.getPassword());
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPasswordVerification(user.getPassword());
+        }
+
         currentSession().save(user);
         return user;
     }
@@ -83,6 +88,13 @@ public class UserDaoHibernate extends BaseDao implements UserDao {
     public Role createRole(Role role) {
         currentSession().save(role);
         return role;
+    }
+
+    @Override
+    public Connection getConnection(String username) {
+        Query query = currentSession().createQuery("select c from Connection c where c.id.userid = :username");
+        query.setString("username", username);
+        return (Connection) query.uniqueResult();
     }
 
 }

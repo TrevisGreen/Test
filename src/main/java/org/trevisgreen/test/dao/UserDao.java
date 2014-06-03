@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.test.dao;
 
+import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.model.Role;
 import org.trevisgreen.test.model.User;
 
@@ -43,5 +44,7 @@ public interface UserDao {
     public Role createRole(Role role);
 
     public User create(User user);
+    
+    public Connection getConnection(String username);
 
 }
