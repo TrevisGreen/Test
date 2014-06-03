@@ -24,10 +24,21 @@
 
 package org.trevisgreen.test.service;
 
+import org.trevisgreen.test.model.Role;
+import org.trevisgreen.test.model.User;
+
 /**
  *
  * @author Trevis
  */
 public interface UserService {
+    public User get(String username);
     
+    public User getByOpenId(String openId);
+    
+    public User update(User user);
+    
+    public User create(User user);
+    
+    public Role getRole(String authority);
 }

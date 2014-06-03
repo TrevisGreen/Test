@@ -21,14 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.trevisgreen.test.validation;
 
-package org.trevisgreen.test.model;
+import javax.validation.ConstraintValidatorContext;
+import java.lang.reflect.Field;
 
 /**
- *
- * @author Trevis
+ * @author Petri Kainulainen
  */
-public enum SocialMediaService {
-    FACEBOOK,
-    TWITTER        
+public class ValidatorUtil {
+
+    public static void addValidationError(String field, ConstraintValidatorContext context) {
+        context.buildConstraintViolationWithTemplate(context.getDefaultConstraintMessageTemplate())
+                .addNode(field)
+                .addConstraintViolation();
+    }
+
+    public static Object getFieldValue(Object object, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Field f = object.getClass().getDeclaredField(fieldName);
+        f.setAccessible(true);
+        return f.get(object);
+    }
 }

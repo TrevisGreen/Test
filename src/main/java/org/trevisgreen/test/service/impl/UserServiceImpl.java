@@ -21,14 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.trevisgreen.test.service.impl;
 
-package org.trevisgreen.test.model;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.trevisgreen.test.dao.UserDao;
+import org.trevisgreen.test.model.Role;
+import org.trevisgreen.test.model.User;
+import org.trevisgreen.test.service.BaseService;
+import org.trevisgreen.test.service.UserService;
 
 /**
  *
  * @author Trevis
  */
-public enum SocialMediaService {
-    FACEBOOK,
-    TWITTER        
+@Service
+@Transactional
+public class UserServiceImpl extends BaseService implements UserService {
+
+    @Autowired
+    private UserDao userDao;
+
+    @Transactional(readOnly = true)
+    @Override
+    public User get(String username) {
+        return userDao.get(username);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public User getByOpenId(String openId) {
+        return userDao.getByOpenId(openId);
+    }
+
+    @Override
+    public User update(User user) {
+        return userDao.update(user);
+    }
+
+    @Override
+    public User create(User user) {
+        return userDao.create(user);
+    }
+
+    @Override
+    public Role getRole(String authority) {
+        return userDao.getRole(authority);
+    }
+
 }

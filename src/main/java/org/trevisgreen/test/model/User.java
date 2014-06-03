@@ -39,6 +39,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -48,6 +49,8 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.trevisgreen.test.validation.PasswordsNotEmpty;
+import org.trevisgreen.test.validation.PasswordsNotEqual;
 
 /**
  *
@@ -85,13 +88,13 @@ public class User implements Serializable, UserDetails {
     private String password;
     @Transient
     private String passwordVerification;
-
     private Boolean enabled = true;
     private Boolean accountExpired = false;
     private Boolean accountLocked = false;
     private Boolean credentialsExpired = false;
     private String firstName;
     private String lastName;
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = {
         @JoinColumn(name = "user_id")}, inverseJoinColumns
             = @JoinColumn(name = "role_id"))
@@ -180,6 +183,20 @@ public class User implements Serializable, UserDetails {
      */
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    /**
+     * @return the passwordVerification
+     */
+    public String getPasswordVerification() {
+        return passwordVerification;
+    }
+
+    /**
+     * @param passwordVerification the passwordVerification to set
+     */
+    public void setPasswordVerification(String passwordVerification) {
+        this.passwordVerification = passwordVerification;
     }
 
     /**
@@ -317,6 +334,28 @@ public class User implements Serializable, UserDetails {
         sb.append(" ");
         sb.append(lastName);
         return sb.toString();
+    }
+
+    /**
+     * @return the signInProvider
+     */
+    public SocialMediaService getSignInProvider() {
+        return signInProvider;
+    }
+
+    /**
+     * @param signInProvider the signInProvider to set
+     */
+    public void setSignInProvider(SocialMediaService signInProvider) {
+        this.signInProvider = signInProvider;
+    }
+
+    public boolean isNormalRegistration() {
+        return signInProvider == null;
+    }
+
+    public boolean isSocialSignIn() {
+        return signInProvider != null;
     }
 
     @Override
