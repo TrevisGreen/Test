@@ -49,8 +49,7 @@ import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 @Configuration
 @EnableSocial
 @Import(PropertyPlaceholderConfig.class)
-
-public class SocialConfig {
+public class SocialConfig implements SocialConfigurer {
 
     @Autowired
     private DataSource dataSource;
@@ -80,5 +79,4 @@ public class SocialConfig {
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator cfl) {
         return new JdbcUsersConnectionRepository(dataSource, cfl, Encryptors.noOpText());
     }
-
 }
