@@ -23,11 +23,14 @@
  */
 package org.trevisgreen.test.service.impl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.test.dao.EventDao;
+import org.trevisgreen.test.model.Event;
 import org.trevisgreen.test.service.BaseService;
 import org.trevisgreen.test.service.EventService;
 
@@ -46,6 +49,21 @@ public class EventServiceImpl extends BaseService implements EventService {
     @Override
     public Map<String, Object> list(Map<String, Object> params) {
         return eventDao.list(params);
+    }
+
+    @Override
+    public Event create(Event event) {
+        Date date = new Date();
+        event.setDateCreated(date);
+        event.setLastUpdated(date);
+        event.setId(UUID.randomUUID().toString());
+        return eventDao.create(event);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Event get(String eventId) {
+        return eventDao.get(eventId);
     }
 
 }

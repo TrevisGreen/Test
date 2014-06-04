@@ -25,6 +25,7 @@
 package org.trevisgreen.test.dao;
 
 import java.util.Map;
+import org.trevisgreen.test.model.Event;
 
 /**
  *
@@ -33,4 +34,8 @@ import java.util.Map;
 public interface EventDao {
     
     public Map<String, Object> list(Map<String, Object> params);
+    
+    public Event create(Event event);
+    
+    public Event get(String eventId);
 }

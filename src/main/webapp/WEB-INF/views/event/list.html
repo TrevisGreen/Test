@@ -77,7 +77,7 @@ THE SOFTWARE.
                         <div class="col-sm-12">
                             <h2><a href="#" th:href="@{'/event/show/'+${event.id}}" th:text="${event.name}">Event Name</a></h2>
                             <p>Date: <th:block th:text="${#dates.format(event.date, 'EEE, MMM dd yyyyy hh:mm a zzz')}">Sun, May 1 2014 12:00 am CST</th:block></p>
-                            <p>Host: <th:block th:text="${event.hostName}">David Mendoza</th:block></p>
+                            <p>Host: <th:block th:text="${event.hostName}">Trevis Green</th:block></p>
                             <th:block th:utext="${event.description}">Event description</th:block>
                         </div>
                     </div>
