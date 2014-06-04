@@ -31,7 +31,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Trevis
+ * @author Trevis <Trevis.Green@gmail.com>
  */
 @Entity
 @Table(name = "UserConnection")

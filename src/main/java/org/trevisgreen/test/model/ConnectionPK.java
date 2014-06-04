@@ -29,7 +29,7 @@ import javax.persistence.Embeddable;
 
 /**
  *
- * @author Trevis
+ * @author Trevis <Trevis.Green@gmail.com>
  */
 @Embeddable
 public class ConnectionPK implements Serializable {
