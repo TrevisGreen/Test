@@ -70,7 +70,7 @@ THE SOFTWARE.
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                                    <h4 th:text="#{error.event.not.confirm}">Error</h4>
+                                    <h4 th:text="#{error.event.not.created}">Error</h4>
                                     <ul>
                                         <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Incorrect input</li>
                                     </ul>
