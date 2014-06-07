@@ -21,17 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.trevisgreen.test.service;
 
-package org.trevisgreen.test.utils;
+import java.util.Map;
+import org.trevisgreen.test.model.Message;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
+public interface MessageService {
 
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String CODE = "CODE";
-    public static final String SIGN_UP = "SIGN_UP";
+    public Map<String, Object> list(Map<String, Object> params);
+
+    public Message get(Long messageId);
+
+    public Message update(Message message);
+
 }

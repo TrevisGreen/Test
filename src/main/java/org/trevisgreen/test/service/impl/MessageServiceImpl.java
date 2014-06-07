@@ -21,17 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.trevisgreen.test.service.impl;
 
-package org.trevisgreen.test.utils;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.trevisgreen.test.dao.MessageDao;
+import org.trevisgreen.test.model.Message;
+import org.trevisgreen.test.service.BaseService;
+import org.trevisgreen.test.service.MessageService;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
+@Service
+@Transactional
+public class MessageServiceImpl extends BaseService implements MessageService {
 
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String CODE = "CODE";
-    public static final String SIGN_UP = "SIGN_UP";
+    @Autowired
+    private MessageDao messageDao;
+
+    @Transactional(readOnly = true)
+    @Override
+    public Map<String, Object> list(Map<String, Object> params) {
+        return messageDao.list(params);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Message get(Long messageId) {
+        return messageDao.get(messageId);
+    }
+
+    @Override
+    public Message update(Message message) {
+        return messageDao.update(message);
+    }
+
 }

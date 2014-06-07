@@ -22,16 +22,24 @@
  * THE SOFTWARE.
  */
 
-package org.trevisgreen.test.utils;
+package org.trevisgreen.test.dao;
+
+import java.util.Map;
+import org.trevisgreen.test.model.Message;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
-
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String CODE = "CODE";
-    public static final String SIGN_UP = "SIGN_UP";
+public interface MessageDao {
+    
+    public Map<String, Object> list(Map<String, Object> params);
+    
+    public Message get(Long messageId);
+    
+    public Message update(Message message);
+    
+    public Message get(String name);
+    
+    public Message create(Message message);
 }
