@@ -24,6 +24,7 @@
 
 package org.trevisgreen.test.service;
 
+import java.util.Map;
 import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.model.Role;
 import org.trevisgreen.test.model.User;
@@ -44,4 +45,10 @@ public interface UserService {
     public Role getRole(String authority);
     
     public Connection getConnection(String username);
+    
+    public Map<String, Object> list(Map<String, Object> params);
+    
+    public User get(Long userId);
+    
+    public String delete(Long userId);
 }

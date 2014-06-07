@@ -21,37 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.test.dao;
 
-import java.util.Map;
-import org.trevisgreen.test.model.Connection;
-import org.trevisgreen.test.model.Role;
-import org.trevisgreen.test.model.User;
+package org.trevisgreen.test.web;
 
 /**
  *
  * @author Trevis
  */
-public interface UserDao {
-
-    public User get(String username);
-
-    public User getByOpenId(String openId);
-
-    public User update(User user);
-
-    public Role getRole(String authority);
-
-    public Role createRole(Role role);
-
-    public User create(User user);
+public class UserController {
     
-    public Connection getConnection(String username);
-    
-    public Map<String, Object> list(Map<String, Object> params);
-    
-    public User get(Long userId);
-    
-    public void delete(User user);
-
 }

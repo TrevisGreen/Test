@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.test.service.impl;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,6 +75,23 @@ public class UserServiceImpl extends BaseService implements UserService {
     @Override
     public Connection getConnection(String username) {
         return userDao.getConnection(username);
+    }
+
+    @Override
+    public Map<String, Object> list(Map<String, Object> params) {
+        return userDao.list(params);
+    }
+
+    @Override
+    public User get(Long userId) {
+        return userDao.get(userId);
+    }
+
+    @Override
+    public String delete(Long userId) {
+        User user = userDao.get(userId);
+        userDao.delete(user);
+        return user.getUsername();
     }
 
 }
