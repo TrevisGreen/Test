@@ -118,6 +118,22 @@ body {
   color: #e4f5fb;
   filter: none; }
 
+.sidenav {
+  margin: 20px 0;
+  padding: 10px 0;
+  text-shadow: 0 1px 0 #333;
+  background-color: rgba(200, 200, 200, 0.5);
+  border-radius: 5px; }
+  .sidenav li.active a {
+    font-weight: bold;
+    color: #FAFAFA;
+    background-color: rgba(100, 100, 100, 0.8); }
+  .sidenav li a {
+    color: #fff; }
+    .sidenav li a:hover {
+      color: #FAFAFA;
+      background-color: rgba(200, 200, 200, 0.8); }
+
 .btn-twitter:hover, .btn-twitter:focus {
   background-image: none;
   background-color: #36b0dd;
