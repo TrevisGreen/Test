@@ -24,8 +24,8 @@ THE SOFTWARE.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:include="/layouts/main :: head('Confirm Event')">
-        <title>EVENT</title>
+    <head th:include='/layouts/main :: head(Messages)'>
+        <title th:text="#{login.title}">Login</title>
 
         <link rel="stylesheet" href="../../../resources/css/jquery-ui.min.css" th:href="@{/resources/css/jquery-ui.min.css}" />
         <link rel="stylesheet" href="../../../resources/css/bootstrap.min.css" th:href="@{/resources/css/bootstrap.min.css}" />
@@ -36,22 +36,46 @@ THE SOFTWARE.
     </head>
     <body>
 
-        <header class="navbar navbar-fixed-top" role="banner" th:substituteby="/layouts/main :: navigation('event')">
+        <header class="navbar navbar-inverse navbar-fixed-top" role="banner" th:replace="/layouts/main :: navigation('admin')">
         </header>
 
         <div class="container">
             <div class="row content">
                 <div class="col-sm-12">
-
-                    <h2 th:text="${event.name}">Event Name</h2>
-                    <p>Date: <th:block th:text="${#dates.format(event.date, 'EEE, MMM dd yyyy hh:mm a zzz')}">Sun, May 1 2014 12:00 am CST</th:block></p>
-                    <p>Host: <th:block th:text="${event.hostName}">Trevis Green</th:block></p>
-                    <th:block th:utext="${event.description}">Event description</th:block>
-
-                    <a href="#" th:href="@{'/event'}" class="btn btn-default btn-lg"><i class="fa fa-list"></i> Events</a>
-                    <a href="#" th:href="@{'/event/edit/'+${event.id}}" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || not #strings.isEmpty(owner)}" class="btn btn-info btn-lg"><i class="fa fa-edit"></i> Edit</a>
-                    <a href="#" th:href="@{'/event/delete/'+${event.id}}" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || not #strings.isEmpty(owner)}" class="btn btn-danger btn-lg" onclick="return confirm('Are you sure you want to delete this event?');"><i class="fa fa-trash-o"></i> Delete</a>
-                    <a href="#" th:href="@{/event/create}" class="btn btn-primary btn-lg"><span class="fa fa-plus"></span> Create</a>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <ul class="nav sidenav">
+                                <li><a href="#" th:href="@{/admin/user}">Users</a></li>
+                                <li class="active"><a href="#" th:href="@{/admin/message}">Messages</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-9">
+                            <div class="table-responsive" style="padding-top: 20px;">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Subject</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="message : ${list}">
+                                            <td><a href="#" th:href="@{'/admin/message/show/'+${message.id}}" th:text="${message.name}">TEST</a></td>
+                                            <td th:text="${message.subject}">TEST</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <ul class="pagination">
+                                    <li class="disabled"><a href="#" th:text="#{pagination.message(${pagination[0]},${pagination[1]},${pagination[2]})}">Pages</a></li>
+                                    <!--/*/ <th-block th:each="pageId : ${pages}"> /*/-->
+                                    <li th:class="${page == pageId}?'active'">
+                                        <a href="#" th:href="@{'/admin/message/list'(page=${pageId},max=${max},offset=${(pageId - 1) * max},filter=${filter})}" th:text="${pageId}">1</a>
+                                    </li>
+                                    <!--/*/ </th-block> /*/-->
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -66,6 +90,6 @@ THE SOFTWARE.
             <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
             <script src="../../../resources/js/main.js" th:src="@{/resources/js/main.js}"></script>
         </div>
-
     </body>
 </html>
+
