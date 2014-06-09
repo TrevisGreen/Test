@@ -29,11 +29,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,9 +48,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.trevisgreen.test.model.Event;
+import org.trevisgreen.test.model.Message;
 import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.service.EventService;
+import org.trevisgreen.test.service.MessageService;
 import org.trevisgreen.test.service.UserService;
+import org.trevisgreen.test.utils.Constants;
 
 /**
  *
@@ -63,6 +70,10 @@ public class EventController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String showCreate(Model model) {
@@ -113,6 +124,22 @@ public class EventController extends BaseController {
             redirectAttributes.addFlashAttribute("successMessage", "event.created");
             redirectAttributes.addFlashAttribute("successMessageAttrs", event.getName());
 
+            Message code = messageService.get(Constants.CODE);
+            MimeMessage message = mailSender.createMimeMessage();
+            InternetAddress[] addresses = {new InternetAddress("iRSVPed <myrsvplease2@gmail.com>")};
+            message.addFrom(addresses);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(user.getUsername());
+            helper.setSubject(code.getSubject());
+            String content = code.getContent();
+            content = content.replaceAll("@@NAME@@", user.getFirstName());
+            content = content.replaceAll("@@USERNAME@@", user.getUsername());
+            content = content.replaceAll("@@CODE@@", event.getCode());
+            content = content.replaceAll("@@EVENT@@", event.getName());
+
+            helper.setText(content, true);
+            mailSender.send(message);
+
             return "redirect:/event/show/" + event.getId();
         } catch (Exception e) {
             log.error("Could not create event", e);
@@ -144,7 +171,7 @@ public class EventController extends BaseController {
     @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
     public String list(Model model,
             Principal principal,
-            @RequestParam(required = false)Boolean mine,
+            @RequestParam(required = false) Boolean mine,
             @RequestParam(required = false) Integer max,
             @RequestParam(required = false) Integer offset,
             @RequestParam(required = false) String filter,
@@ -179,11 +206,11 @@ public class EventController extends BaseController {
             params.put("order", "asc");
         }
         params.put("order2", params.get("order"));
-        
+
         if (mine != null) {
             log.debug("Mine selected");
             params.put("mine", Boolean.TRUE);
-            params.put("principal", principal.getName());            
+            params.put("principal", principal.getName());
         }
 
         params = eventService.list(params);

@@ -37,5 +37,7 @@ public interface MessageService {
     public Message get(Long messageId);
 
     public Message update(Message message);
+    
+    public Message get(String name);
 
 }

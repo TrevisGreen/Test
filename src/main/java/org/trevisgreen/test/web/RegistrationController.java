@@ -24,11 +24,15 @@
 package org.trevisgreen.test.web;
 
 import java.util.Arrays;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -46,9 +50,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
+import org.trevisgreen.test.model.Message;
 import org.trevisgreen.test.model.SocialMediaService;
 import org.trevisgreen.test.model.User;
+import org.trevisgreen.test.service.MessageService;
 import org.trevisgreen.test.service.UserService;
+import org.trevisgreen.test.utils.Constants;
 
 /**
  *
@@ -62,6 +69,10 @@ public class RegistrationController extends BaseController {
     private UserService userService;
     @Autowired
     protected AuthenticationManager authenticationManager;
+    @Autowired
+    private JavaMailSender mailSender;
+    @Autowired
+    private MessageService messageService;
 
     @RequestMapping(value = "/user/register", method = RequestMethod.GET)
     public String showRegistrationForm(WebRequest request, Model model, ProviderSignInUtils providerSignInUtils, HttpSession session) {
@@ -123,7 +134,24 @@ public class RegistrationController extends BaseController {
 
                 if (user.getSignInProvider() != null) {
                     providerSignInUtils.doPostSignUp(user.getUsername(), webRequest);
+                    password = user.getSignInProvider().toString() + " Account";
                 }
+
+                Message signup = messageService.get(Constants.SIGN_UP);
+                MimeMessage message = mailSender.createMimeMessage();
+                InternetAddress[] addresses = {new InternetAddress("iRSVPed <myrsvplease2@gmail.com>")};
+                message.addFrom(addresses);
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+                helper.setTo(user.getUsername());
+                helper.setSubject(signup.getSubject());
+                String content = signup.getContent();
+                content = content.replaceAll("@@NAME@@", user.getFirstName());
+                content = content.replaceAll("@@USERNAME@@", user.getUsername());
+                content = content.replaceAll("@@PASSWORD@@", password);
+
+                helper.setText(content, true);
+                mailSender.send(message);
+
             } else {
                 log.warn("User already exists", user.getUsername());
                 bindingResult.rejectValue("username", "user.email.already.exists");
@@ -137,7 +165,6 @@ public class RegistrationController extends BaseController {
             return back;
         }
 
-        
     }
 
 }
