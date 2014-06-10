@@ -22,24 +22,16 @@
  * THE SOFTWARE.
  */
 
-package org.trevisgreen.test.dao;
+package org.trevisgreen.test.service;
 
-import java.util.Map;
-import org.trevisgreen.test.model.Event;
+import org.trevisgreen.test.model.Party;
+import org.trevisgreen.test.utils.NotEnoughSeatsException;
 
 /**
  *
  * @author Trevis
  */
-public interface EventDao {
+public interface PartyService {
     
-    public Map<String, Object> list(Map<String, Object> params);
-    
-    public Event create(Event event);
-    
-    public Event get(String eventId);
-    
-    public Event getByCode(String code);
-    
-    public void delete(Event event);
+    public Party create(Party party) throws NotEnoughSeatsException;
 }

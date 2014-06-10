@@ -24,22 +24,15 @@
 
 package org.trevisgreen.test.dao;
 
-import java.util.Map;
-import org.trevisgreen.test.model.Event;
+import org.trevisgreen.test.model.Party;
 
 /**
  *
  * @author Trevis
  */
-public interface EventDao {
+public interface PartyDao {
     
-    public Map<String, Object> list(Map<String, Object> params);
+    public Integer getAllotedSeats(Party party);
     
-    public Event create(Event event);
-    
-    public Event get(String eventId);
-    
-    public Event getByCode(String code);
-    
-    public void delete(Event event);
+    public Party create(Party party);
 }

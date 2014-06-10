@@ -21,7 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package org.trevisgreen.test.utils;
 
 /**
@@ -34,4 +33,5 @@ public class Constants {
     public static final String CREATE = "CREATE";
     public static final String CODE = "CODE";
     public static final String SIGN_UP = "SIGN_UP";
+    public static final String THANKS = "THANKS";
 }

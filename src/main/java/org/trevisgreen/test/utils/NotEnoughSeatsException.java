@@ -21,25 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-package org.trevisgreen.test.dao;
-
-import java.util.Map;
-import org.trevisgreen.test.model.Event;
+package org.trevisgreen.test.utils;
 
 /**
  *
  * @author Trevis
  */
-public interface EventDao {
-    
-    public Map<String, Object> list(Map<String, Object> params);
-    
-    public Event create(Event event);
-    
-    public Event get(String eventId);
-    
-    public Event getByCode(String code);
-    
-    public void delete(Event event);
+public class NotEnoughSeatsException extends Exception {
+
+    public NotEnoughSeatsException() {
+        super();
+    }
+
+    public NotEnoughSeatsException(String message) {
+        super(message);
+    }
+
+    public NotEnoughSeatsException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

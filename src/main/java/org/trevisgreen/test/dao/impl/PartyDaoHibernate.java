@@ -21,25 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package org.trevisgreen.test.dao.impl;
 
-package org.trevisgreen.test.dao;
-
-import java.util.Map;
-import org.trevisgreen.test.model.Event;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.trevisgreen.test.dao.BaseDao;
+import org.trevisgreen.test.dao.PartyDao;
+import org.trevisgreen.test.model.Party;
 
 /**
  *
  * @author Trevis
  */
-public interface EventDao {
-    
-    public Map<String, Object> list(Map<String, Object> params);
-    
-    public Event create(Event event);
-    
-    public Event get(String eventId);
-    
-    public Event getByCode(String code);
-    
-    public void delete(Event event);
+@Repository
+@Transactional
+public class PartyDaoHibernate extends BaseDao implements PartyDao {
+
+    @Override
+    public Integer getAllotedSeats(Party party) {
+        Criteria criteria = currentSession().createCriteria(Party.class);
+
+        criteria.createCriteria("event").add(Restrictions.idEq(party.getEvent().getId()));
+        criteria.setProjection(Projections.sum("seats"));
+
+        Long results = (Long) criteria.uniqueResult();
+        log.debug("Results {}", results);
+        if (results == null) {
+            results = 0L;
+        }
+        return results.intValue();
+    }
+
+    @Override
+    public Party create(Party party) {
+        currentSession().save(party);
+        return party;
+    }
+
 }

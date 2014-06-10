@@ -30,7 +30,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.test.dao.EventDao;
+import org.trevisgreen.test.dao.UserDao;
 import org.trevisgreen.test.model.Event;
+import org.trevisgreen.test.model.Role;
+import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.service.BaseService;
 import org.trevisgreen.test.service.EventService;
 
@@ -44,6 +47,8 @@ public class EventServiceImpl extends BaseService implements EventService {
 
     @Autowired
     private EventDao eventDao;
+    @Autowired 
+    private UserDao userDao;
 
     @Transactional(readOnly = true)
     @Override
@@ -65,5 +70,31 @@ public class EventServiceImpl extends BaseService implements EventService {
     public Event get(String eventId) {
         return eventDao.get(eventId);
     }
+    
+        @Override
+    public Event getByCode(String code) {
+        return eventDao.getByCode(code);
+    }
+
+    @Override
+    public String delete(String eventId, String name) {
+        User user = userDao.get(name);
+        boolean isAdmin = false;
+        for(Role role : user.getRoles()) {
+            if (role.getAuthority().contains("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        Event event = eventDao.get(eventId);
+        if (isAdmin || event.getUser().getId().equals(user.getId())) {
+            eventDao.delete(event);
+            return event.getName();
+        } else {
+            throw new RuntimeException("You can't delete an event that doesn't belong to you.");
+        }
+        
+    }
+
 
 }
