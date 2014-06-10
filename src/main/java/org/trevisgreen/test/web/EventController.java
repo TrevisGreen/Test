@@ -23,15 +23,22 @@
  */
 package org.trevisgreen.test.web;
 
+import au.com.bytecode.opencsv.CSVWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -49,9 +56,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.trevisgreen.test.model.Event;
 import org.trevisgreen.test.model.Message;
+import org.trevisgreen.test.model.Party;
 import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.service.EventService;
 import org.trevisgreen.test.service.MessageService;
+import org.trevisgreen.test.service.PartyService;
 import org.trevisgreen.test.service.UserService;
 import org.trevisgreen.test.utils.Constants;
 
@@ -74,6 +83,8 @@ public class EventController extends BaseController {
     private MessageService messageService;
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private PartyService partyService;
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String showCreate(Model model) {
@@ -163,6 +174,9 @@ public class EventController extends BaseController {
             if (user.getId().equals(event.getUser().getId())) {
                 model.addAttribute("owner", Boolean.TRUE);
             }
+            List<Party> parties = partyService.findAllByEvent(event, user);
+            model.addAttribute("parties", parties);
+
         }
 
         return "event/show";
@@ -184,6 +198,46 @@ public class EventController extends BaseController {
             redirectAttributes.addFlashAttribute("errorMessage", "event.not.deleted.cause.not.signed.in");
         }
         return "redirect:/event";
+    }
+
+    @RequestMapping(value = "/rsvp/{eventId}", method = RequestMethod.GET)
+    public String rsvp(@PathVariable String eventId, RedirectAttributes redirectAttributes, Principal principal, HttpServletResponse response) {
+        if (principal != null) {
+            try {
+                SimpleDateFormat sdf2 = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a ZZZ");
+                Event event = eventService.get(eventId);
+                User user = userService.get(principal.getName());
+                List<Party> parties = partyService.findAllByEvent(event, user);
+                List<String[]> rows = new ArrayList<>();
+                String[] headers = new String[]{"Name", "Email", "Phone",
+                    "Seats", "Comments", "Created", "Event"
+                };
+                rows.add(headers);
+                for (Party party : parties) {
+                    String[] row = new String[]{party.getName(), party.getEmail(),
+                        party.getPhone(), party.getSeats().toString(), party.getComments(),
+                        sdf2.format(party.getDateCreated()), party.getEvent().getName()
+                    };
+                    rows.add(row);
+                }
+                SimpleDateFormat sdf3 = new SimpleDateFormat("yyyyMMddHHmmss");
+                response.setContentType("text/csv");
+                response.addHeader("Content-Disposition", "attachment; filename=\"" + event.getName() + "-" + sdf3.format(new Date()) + ".csv\"");
+                OutputStream out = response.getOutputStream();
+                try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(out))) {
+                    writer.writeAll(rows);
+                }
+                out.flush();
+                return null;
+            } catch (Exception e) {
+                log.error("Could not export rsvp's", e);
+                redirectAttributes.addFlashAttribute("errorMessage", "event.rsvps.not.exported");
+                redirectAttributes.addFlashAttribute("errorMessageAttrs", e.getMessage());
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "event.rsvps.not.exported.cause.not.signed.in");
+        }
+        return "redirect:/show/" + eventId;
     }
 
     @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)

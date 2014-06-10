@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.test.dao.impl;
+package org.trevisgreen.test.service.impl;
 
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,8 @@ import org.trevisgreen.test.dao.EventDao;
 import org.trevisgreen.test.dao.PartyDao;
 import org.trevisgreen.test.model.Event;
 import org.trevisgreen.test.model.Party;
+import org.trevisgreen.test.model.Role;
+import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.service.BaseService;
 import org.trevisgreen.test.service.PartyService;
 import org.trevisgreen.test.utils.NotEnoughSeatsException;
@@ -57,8 +61,24 @@ public class PartyServiceImpl extends BaseService implements PartyService {
                 throw new NotEnoughSeatsException("There's only " + (event.getSeats() - allotedSeats) + " place(s) available.");
             }
         }
+        party.setDateCreated(new Date());
         party = partyDao.create(party);
         return party;
+    }
+
+    @Override
+    public List<Party> findAllByEvent(Event event, User user) {
+        boolean isAdmin = false;
+        for (Role role : user.getRoles()) {
+            if (role.getAuthority().contains("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (isAdmin || event.getUser().getId().equals(user.getId())) {
+            return partyDao.findAllByEvent(event);
+        }
+        return null;
     }
 
 }

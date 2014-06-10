@@ -24,6 +24,8 @@
 
 package org.trevisgreen.test.dao;
 
+import java.util.List;
+import org.trevisgreen.test.model.Event;
 import org.trevisgreen.test.model.Party;
 
 /**
@@ -35,4 +37,6 @@ public interface PartyDao {
     public Integer getAllotedSeats(Party party);
     
     public Party create(Party party);
+    
+    public List<Party> findAllByEvent(Event event);
 }

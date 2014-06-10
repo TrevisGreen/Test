@@ -24,7 +24,10 @@
 
 package org.trevisgreen.test.service;
 
+import java.util.List;
+import org.trevisgreen.test.model.Event;
 import org.trevisgreen.test.model.Party;
+import org.trevisgreen.test.model.User;
 import org.trevisgreen.test.utils.NotEnoughSeatsException;
 
 /**
@@ -34,4 +37,6 @@ import org.trevisgreen.test.utils.NotEnoughSeatsException;
 public interface PartyService {
     
     public Party create(Party party) throws NotEnoughSeatsException;
+    
+    public List<Party> findAllByEvent(Event event, User user);
 }
