@@ -87,6 +87,7 @@ public class UserDaoHibernate extends BaseDao implements UserDao {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Role getRole(String authority) {
         return (Role) currentSession().get(Role.class, authority);
     }
