@@ -30,8 +30,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.trevisgreen.test.model.Connection;
 import org.trevisgreen.test.service.UserService;
+import org.trevisgreen.test.utils.Constants;
 
 /**
  *
@@ -61,6 +64,13 @@ public class HomeController extends BaseController {
         }
 
         return "home/home";
+    }
+    
+    @RequestMapping(value = "/currentBackground", params = {"backgroundId"}, method = RequestMethod.POST)
+    @ResponseBody
+    public String setBackground(HttpSession session, @RequestParam Integer backgroundId) {
+        session.setAttribute(Constants.BACKGROUND_ID, backgroundId);
+        return "OK";
     }
 
 }
