@@ -23,16 +23,33 @@
  */
 package org.trevisgreen.test.web;
 
+import java.io.IOException;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.trevisgreen.test.model.Connection;
+import org.trevisgreen.test.model.Event;
+import org.trevisgreen.test.model.Party;
+import org.trevisgreen.test.model.User;
+import org.trevisgreen.test.service.EventService;
+import org.trevisgreen.test.service.PartyService;
 import org.trevisgreen.test.service.UserService;
 import org.trevisgreen.test.utils.Constants;
 
@@ -45,6 +62,10 @@ public class HomeController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private EventService eventService;
+    @Autowired
+    private PartyService partyService;
 
     @RequestMapping(value = {"/", "/home"}, method = RequestMethod.GET)
     public String home(HttpSession session) {
@@ -60,12 +81,13 @@ public class HomeController extends BaseController {
                 } else {
                     session.setAttribute("noImageUrl", Boolean.TRUE);
                 }
+                return "redirect:/profile";
             }
         }
 
         return "home/home";
     }
-    
+
     @RequestMapping(value = "/currentBackground", params = {"backgroundId"}, method = RequestMethod.POST)
     @ResponseBody
     public String setBackground(HttpSession session, @RequestParam Integer backgroundId) {
@@ -73,4 +95,88 @@ public class HomeController extends BaseController {
         return "OK";
     }
 
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String profile(Model model,
+            Principal principal,
+            @RequestParam(required = false) Integer max,
+            @RequestParam(required = false) Integer offset,
+            @RequestParam(required = false) String filter,
+            @RequestParam(required = false) Long page,
+            @RequestParam(required = false) String sort,
+            @RequestParam(required = false) String order) {
+
+        Map<String, Object> params = new HashMap<>();
+        if (max != null) {
+            params.put("max", max);
+            if (offset != null) {
+                params.put("offset", offset);
+            }
+        } else {
+            params.put("max", 10);
+            params.put("offset", 0);
+        }
+
+        if (StringUtils.isNotBlank(filter)) {
+            params.put("filter", filter);
+        }
+
+        if (StringUtils.isNotBlank(sort)) {
+            params.put("sort", sort);
+        } else {
+            params.put("sort", "name");
+        }
+
+        if (StringUtils.isNotBlank(order)) {
+            params.put("order", order);
+        } else {
+            params.put("order", "asc");
+        }
+        params.put("order2", params.get("order"));
+
+        params.put("mine", Boolean.TRUE);
+        params.put("principal", principal.getName());
+
+        params = eventService.list(params);
+
+        this.paginate(params, model, page);
+
+        model.addAllAttributes(params);
+
+        return "home/profile";
+    }
+
+    @RequestMapping(value = "/profile/{eventId}", method = RequestMethod.GET)
+    public String show(@PathVariable String eventId, @ModelAttribute("event") Event event, RedirectAttributes redirectAttributes, Model model, Principal principal) {
+        if (event == null || !StringUtils.isNotBlank(event.getName())) {
+            event = eventService.get(eventId);
+            model.addAttribute("event", event);
+        }
+
+        if (principal != null) {
+            User user = userService.get(principal.getName());
+            if (user.getId().equals(event.getUser().getId())) {
+                model.addAttribute("owner", Boolean.TRUE);
+            }
+            List<Party> parties = partyService.findAllByEvent(event, user);
+            model.addAttribute("parties", parties);
+        }
+
+        return "home/show";
+    }
+
+    @RequestMapping(value = "/image/{eventId}", method = RequestMethod.GET)
+    public String image(HttpServletRequest request, HttpServletResponse response, @PathVariable String eventId) {
+        Event event = eventService.get(eventId);
+        if (event != null) {
+            response.setContentType(event.getContentType());
+            response.setContentLength(event.getImageSize().intValue());
+            try {
+                response.getOutputStream().write(event.getImageData());
+            } catch (IOException e) {
+                log.error("Could not write image to outputstream", e);
+                throw new RuntimeException("Could not get image", e);
+            }
+        }
+        return null;
+    }
 }

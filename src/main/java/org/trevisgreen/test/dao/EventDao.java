@@ -42,4 +42,6 @@ public interface EventDao {
     public Event getByCode(String code);
     
     public void delete(Event event);
+    
+    public Event update(Event event);
 }
