@@ -76,10 +76,14 @@ THE SOFTWARE.
                         <p>Email: <th:block th:text="${event.hostEmail}">trevis@irsvped.com</th:block></p>
                         <p>Phone: <th:block th:text="${event.hostPhone}">999 999 9999</th:block></p>
                         <p>Code: <th:block th:text="${event.code}">TEST</th:block></p>
+                        <p>Street: <th:block th:text="${event.street}">TEST</th:block></p>
+                        <p>City: <th:block th:text="${event.city}">TEST</th:block></p>
+                        <p>State: <th:block th:text="${event.state}">TEST</th:block></p>
+                        <p>ZIP Code: <th:block th:text="${event.zip}">TEST</th:block></p>
                     </th:block>
-                    <th:block th:utext="${event.description}">Event description</th:block>
-
-                    <p>&nbsp;</p>
+                    <p th:utext="${event.description}" th:unless="${#strings.isEmpty(event.description)}">Event description</p>
+                    <p th:unless="${#strings.isEmpty(event.imageName)}"><img src="#" th:src="@{'/image/'+${event.id}}" th:alt="${event.imageName}" alt="imageName" class='img-responsive' style='width: 100%;'/></p>
+                   
                     <a href="#" th:href="@{'/event'}" class="btn btn-default btn-lg"><i class="fa fa-list"></i> Events</a>
                     <a href="#" th:href="@{'/event/rsvp/'+${event.id}}" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || not #strings.isEmpty(owner)}" class="btn btn-success btn-lg"><i class="fa fa-list-alt"></i> RSVP's</a>
                     <a href="#" th:href="@{'/event/edit/'+${event.id}}" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') || not #strings.isEmpty(owner)}" class="btn btn-info btn-lg"><i class="fa fa-edit"></i> Edit</a>
